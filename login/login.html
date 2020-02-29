@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+      <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+      
+      <!-- TODO: Add SDKs for Firebase products that you want to use
+           https://firebase.google.com/docs/web/setup#available-libraries -->
+      <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>      
+    </head>
+    <body>
+        <div class="container">
+            <div class="card-header">
+                <h3>Ingrese sus datos de Usuario</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="edt_login">Usuario</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control"
+                          id="login" name="login"  value=""
+                          placeholder="Usuario"
+                        >
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="edt_password">Password</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="password" class="form-control"
+                          id="password" name="edt_password"  value=""
+                          placeholder="Password"
+                        >
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label ></label>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" id="btn_login" name="modo" value="agregar" class="btn btn-primary">Aceptar</button>
+                        <button type="button" id="btn_cancelar" name="cancelar" class="btn btn-danger" value="cancelar" class="btn btn-primary btn-lg" onclick="history.back()" >Cancelar</button>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+        <script src="../registrarfirebase.js"></script>
+        <script src="login.js"></script>
+    </body>
+</html>
