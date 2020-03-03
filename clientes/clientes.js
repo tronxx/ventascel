@@ -65,3 +65,27 @@ $('#btn_eliminar').click(function(){
     url_z = "edicion_cliente.html?idcliente="+idcliente_z+"&accion=eliminar";
     $(location).attr('href',url_z);
 });
+
+function carga_clientes(){
+    registrarapp();
+    const db = firebase.database();
+    const misclientes = db.child('clientes');
+    const query = misclientes.orderByChlid('codigo');
+    query.on('value', snap=> {
+        
+    });
+    //var url = 'http://mdss1/www/cgi/cartera/busca_vnd.php';
+    $.getJSON(url_z).done(function(result){
+        for(var ii_z=0; ii_z<result.length; ii_z++)
+        {
+            var row_z = "<tr data-idvnd='" +  result[ii_z]["idvnd"] + "'>";
+            row_z = row_z + "<td>" +  result[ii_z]["codigo"] + "</td>";
+            row_z = row_z + "<td>" +  result[ii_z]["nombre"] + "</td>";
+            var idcheck_z = "chk_" + result[ii_z]["idvnd"];
+            row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
+            row_z = row_z + "</tr>";
+            $("#tabla_vendedores tbody").append(row_z);
+        }
+    });    
+
+};
