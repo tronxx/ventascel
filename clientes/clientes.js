@@ -3,7 +3,9 @@ $(document).ready(function(){
     if( usuario_z == null) {
         window.location="../login/login.html";
     }
-    encender_apagar_botones (InVisible);
+    registrarapp();
+    encender_apagar_botones ("InVisible");
+    carga_clientes();
 }
 )
 
@@ -67,25 +69,17 @@ $('#btn_eliminar').click(function(){
 });
 
 function carga_clientes(){
-    registrarapp();
     const db = firebase.database();
-    const misclientes = db.child('clientes');
-    const query = misclientes.orderByChlid('codigo');
-    query.on('value', snap=> {
-        
-    });
-    //var url = 'http://mdss1/www/cgi/cartera/busca_vnd.php';
-    $.getJSON(url_z).done(function(result){
-        for(var ii_z=0; ii_z<result.length; ii_z++)
-        {
-            var row_z = "<tr data-idvnd='" +  result[ii_z]["idvnd"] + "'>";
-            row_z = row_z + "<td>" +  result[ii_z]["codigo"] + "</td>";
-            row_z = row_z + "<td>" +  result[ii_z]["nombre"] + "</td>";
-            var idcheck_z = "chk_" + result[ii_z]["idvnd"];
-            row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
-            row_z = row_z + "</tr>";
-            $("#tabla_vendedores tbody").append(row_z);
-        }
-    });    
+    const misclientes = db.ref("clientes");
+    misclientes.orderByChild("codigo").on("child_added", function (snapshot){
+        var d = snapshot.val(); 
+        var row_z = "<tr data-idcliente='" +  d.uid + "'>";
+        row_z = row_z + "<td>" +  d.codigo + "</td>";
+        row_z = row_z + "<td>" +  d.nombre + "</td>";
+        var idcheck_z = "chk_" + d.uuid;
+        row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
+        row_z = row_z + "</tr>";
+        $("#tbl_clientes tbody").append(row_z);
 
+    });
 };
