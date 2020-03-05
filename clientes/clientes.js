@@ -5,7 +5,17 @@ $(document).ready(function(){
     }
     registrarapp();
     encender_apagar_botones ("InVisible");
-    carga_clientes();
+    var email_z = "tronxx@gmail.com";
+    var pwd_z = "master";
+    const auth = firebase.auth();
+    auth.signInWithEmailAndPassword(email_z, pwd_z)
+   .then(function(user){
+       console.log("Usuario ingresado");
+       console.log ("Voy a Buscar los Clientes");
+       carga_clientes();
+   }).catch(function(){
+       console.log("Usuario Incorrecto. Intente de Nuevo");
+   });
 }
 )
 
@@ -33,6 +43,7 @@ $('#tbl_clientes').on('click','tr td', function(evt){
     $("#idcliente_sel").val(idcliente_z);
     $("#row_sel").val(rowIndex);
     $("#chk_" + idcliente_z).attr('src','../imgs/checked.png');
+    console.log("uid:", idcliente_z);
 });
 
 $('#btn_modificar').click(function(){
@@ -71,15 +82,23 @@ $('#btn_eliminar').click(function(){
 function carga_clientes(){
     const db = firebase.database();
     const misclientes = db.ref("clientes");
-    misclientes.orderByChild("codigo").on("child_added", function (snapshot){
-        var d = snapshot.val(); 
-        var row_z = "<tr data-idcliente='" +  d.uid + "'>";
-        row_z = row_z + "<td>" +  d.codigo + "</td>";
-        row_z = row_z + "<td>" +  d.nombre + "</td>";
-        var idcheck_z = "chk_" + d.uuid;
-        row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
-        row_z = row_z + "</tr>";
-        $("#tbl_clientes tbody").append(row_z);
+    misclientes.orderByChild("codigo").once("value")
+    .then (function (snapshot) {
+        snapshot.forEach ( function(childSnapshot){
+            var d = childSnapshot.val(); 
+            var uid_z = childSnapshot.key; 
+            var row_z = "<tr data-idcliente='" +  uid_z + "'>";
+            row_z = row_z + "<td>" +  d.codigo + "</td>";
+            row_z = row_z + "<td>" +  d.nombre + "</td>";
+            row_z = row_z + "<td>" +  d.telefono + "</td>";
+            var idcheck_z = "chk_" + uid_z;
+            row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
+            row_z = row_z + "</tr>";
+            $("#tbl_clientes tbody").append(row_z);
 
-    });
+        }
+
+        )
+    }
+    ) ;
 };
