@@ -10,7 +10,8 @@ $("#btn_login").on("click",  e=>{
    auth.signInWithEmailAndPassword(email_z, pwd_z)
    .then(function(user){
        alert("Usuario ingresado");
-       window.localStorage.setItem('usuario', email_z);
+       sessionStorage.setItem('usuario', email_z);
+       sessionStorage.setItem('pwd', pwd_z);
        var ts = new Date();
        window.localStorage.setItem('timestamp', ts.toISOString());
        window.location="../main/main.html";

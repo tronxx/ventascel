@@ -42,17 +42,22 @@
       </div>
       <div class="card-body">
           <div class="container">
-              <input type="text" placeholder="Codigo" >
-              <button id="btn_buscarcliente" class="btn btn-primary" >Buscar Cliente</button>
-              <button id="btn_registrarventa" class="btn btn-primary" visible="false">Registrar Venta</button>
-          </div>
-          <div id="datoscli"  class="container">
-              <input type="text" id="nombre" ><br>
-              <input type="text" id="telefono" >
-          </div>
-          
+              <label for="edt_codigo">Codigo</label> 
+              <input type="text" id="edt_codigo" placeholder="Codigo" >
+            <button id="btn_buscarcliente" class="btn btn-primary" >Buscar Cliente</button>
+            <button id="btn_registrarventa" class="btn btn-primary" visible="false">Registrar Venta</button>
+        </div>
+        <div id="datoscli"  class="container">
+            <label for="edt_nombre" >Nombre</label> <input type="text" id="edt_nombre" ><br>
+            <label for="edt_telefono" >Telefono</label> <input type="text" id="edt_telefono" ><br>
+            <label for="edt_recargas" >Recargas</label> <input type="text" id="edt_recargas" ><br>
+        </div>
+         
       </div>
+
       <input type="hidden" id="idcliente_sel" value = "-1">
+      <input type="hidden" id="recargasusadas" value = "-1">
+      <input type="hidden" id="recargastotal" value = "-1">
       <input type="hidden" id="row_sel" value="-1">
       <script src="registrarventa.js"></script>
       <script src="../checasesion.js"></script>

@@ -53,61 +53,32 @@
     
         
 
-
-        <div id="edicion_cliente">
+          <div id="edicion_cliente">
             <div class="container">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        Datos del Cliente
-                    </div>
-                    <div class="panel-body">
-                      <form class="form-inline" id="formulario_vendedor" role="form" >
-                        <div class="container">
-                          <div class="row">
+              <form action="" id="frm_edicion_cliente">
+              <div class="panel panel-default">
 
-                            <div class="col-sm-3">
-                              <label for="edt_codigo">Codigo</label>
-                            </div>
-                            <div class="sol-sm-6">
-                              <input type="text" id="edt_codigo" name="codigo" class="form-control"
-                                maxlength="10" placeholder="Codigo"
-                              >
-                            </div>
-                          </div>
-                          <div class="row">
-
-                            <div class="col-sm-3">
-                              <label for="edt_nombre">Nombre</label>
-                            </div>
-                            <div class="col-sm-6">
-                              <input type="text" name="nombre" id="edt_nombre"  class="form-control"
-                                placeholder="Nombre" onkeyup="javascript:this.value=this.value.toUpperCase();"
-                              >
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-sm-3">
-                              <label for="edt_telefono">Telefono</label>
-                            </div>
-                            <div class="col-sm-6">
-                              <input type="text" name="telefono" id="edt_telefono"  class="form-control"
-                              maxlength="10" placeholder="Telefono" onkeyup="javascript:this.value=this.value.toUpperCase();"
-                              >
-                            </div>
-                          </div>
-                        </div>
-
-                      </form>
-
-                    </div>
-                    <div class="panel-footer">
-                        <button type="button" id="btn_aceptar" name="modo" value="agregar" class="btn btn-primary">Aceptar</button>
-                        <button type="button" id="btn_cancelar" name="cancelar" class="btn btn-danger" value="cancelar" class="btn btn-primary btn-lg" onclick="history.back()" >Cancelar</button>
-                    </div>
-        
+                <div class="panel-heading ">
+                  <span id="lbl_titulo" class="label label-primary">
+                    Datos de Cliente
+                  </span>
                 </div>
+                <div class="panel-body">
+                  <table class="table" id="tbl_edicion_cliente">
+                    <tbody id="body_edicion_clientes">
+
+                    </tbody>
+                  </table>
+
+                </div>
+                <div class="panel-footer">
+                  <button type="button" id="btn_aceptar" name="modo" value="agregar" class="btn btn-primary">Aceptar</button>
+                  <button type="button" id="btn_cancelar" name="cancelar" class="btn btn-danger" value="cancelar" class="btn btn-primary btn-lg" onclick="history.back()" >Cancelar</button>
+                 </div>
+              </div>
+              </form>
             </div>
-        </div>
+          </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -118,6 +89,7 @@
         <script src="../checasesion.js"></script>        
         <script src="../registrarfirebase.js"></script>        
         <script src="edicion_cliente.js"></script>
+        <script src="../utils/tools.js"></script>
   
     </body>
 </html>

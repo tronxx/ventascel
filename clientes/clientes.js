@@ -1,14 +1,12 @@
 $(document).ready(function(){
     var usuario_z = checa_sesion();
-    if( usuario_z == null) {
+    if( usuario_z.usuario == null) {
         window.location="../login/login.html";
     }
     registrarapp();
     encender_apagar_botones ("InVisible");
-    var email_z = "tronxx@gmail.com";
-    var pwd_z = "master";
     const auth = firebase.auth();
-    auth.signInWithEmailAndPassword(email_z, pwd_z)
+    auth.signInWithEmailAndPassword(usuario_z.usuario, usuario_z.pwd)
    .then(function(user){
        console.log("Usuario ingresado");
        console.log ("Voy a Buscar los Clientes");
@@ -91,14 +89,25 @@ function carga_clientes(){
             row_z = row_z + "<td>" +  d.codigo + "</td>";
             row_z = row_z + "<td>" +  d.nombre + "</td>";
             row_z = row_z + "<td>" +  d.telefono + "</td>";
+            row_z = row_z + "<td>" +  d.recargas + "</td>";
+            row_z = row_z + "<td>" +  d.usadas + "</td>";
             var idcheck_z = "chk_" + uid_z;
             row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
             row_z = row_z + "</tr>";
             $("#tbl_clientes tbody").append(row_z);
 
-        }
-
-        )
+        });
     }
     ) ;
 };
+
+$('#btn_eliminar').click(function(){
+    var idcliente_z = $("#idcliente_sel").val();
+    var  data_z = {
+        "idcliente": idcliente_z,
+        "accion": "eliminar_ok"
+    }
+    url_z = "edicion_cliente.html?idcliente="+idcliente_z+"&accion=eliminar";
+    $(location).attr('href',url_z);
+
+});
