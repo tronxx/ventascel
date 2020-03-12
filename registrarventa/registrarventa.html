@@ -1,9 +1,11 @@
-<html>
+<html lang="es" >
     <head>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">        
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </head>
     <body>
       <nav class="navbar navbar-expand-lg navbar-light bg-primary">
@@ -45,16 +47,53 @@
               <label for="edt_codigo">Codigo</label> 
               <input type="text" id="edt_codigo" placeholder="Codigo" >
             <button id="btn_buscarcliente" class="btn btn-primary" >Buscar Cliente</button>
-            <button id="btn_registrarventa" class="btn btn-primary" visible="false">Registrar Venta</button>
         </div>
         <div id="datoscli"  class="container">
             <label for="edt_nombre" >Nombre</label> <input type="text" id="edt_nombre" ><br>
-            <label for="edt_telefono" >Telefono</label> <input type="text" id="edt_telefono" ><br>
-            <label for="edt_recargas" >Recargas</label> <input type="text" id="edt_recargas" ><br>
+            <label for="edt_telefono" >Telefono</label> <input type="text" id="edt_telefono" /><br>
+            <label for="edt_recargas" >Recargas</label> <input type="text" id="edt_recargas" />
+            <button id="btn_registrarventa" class="btn btn-primary">Registrar Venta T.A</button>
         </div>
-         
+        <div id="div_tbl_recargas">
+        </div>
+          
       </div>
-
+        
+      <!-- Modal -->
+      <div class="modal fade" id="modal_frm_registrar_venta" role="dialog">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">
+                          <span aria-hidden="true">X</span>
+                          <span class="sr-only">Cerrar</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Datos de la Recarga</h4>
+                  </div>
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+                      <p class="statusMsg"></p>
+                      <form role="form">
+                          <div class="form-group">
+                              <label for="edt_fecha">Fecha</label>
+                              <input type="date" class="form-control" name="edt_fecha"  id="edt_fecha" placeholder="Fecha de la Recarga"/>
+                          </div>
+                          <div class="form-group">
+                              <label for="edt_telefono">Telefono</label>
+                              <input type="number" class="form-control" name="edt_telefono" id="edt_telefono" placeholder="Telefono al que pone la recarga"/>
+                          </div>
+                      </form>
+                  </div>
+                  <!-- Modal Footer -->
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn btn-primary submitBtn" onclick="btn_aceptar_recarga()">Aceptar</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+        
       <input type="hidden" id="idcliente_sel" value = "-1">
       <input type="hidden" id="recargasusadas" value = "-1">
       <input type="hidden" id="recargastotal" value = "-1">
@@ -67,7 +106,8 @@
       <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>      
       <script src="../registrarfirebase.js"></script>
       <script src="../utils/tools.js"></script>
-      
+
+        
     </body>
 
 </html>
