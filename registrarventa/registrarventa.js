@@ -136,18 +136,26 @@ function cargar_formulario_venta(){
 
 function btn_aceptar_recarga(){
     var idcliente_z = $("#idcliente_sel").val();
-    var fecha_z = $("Edt_fecha").val();
+    var fecha2_z = $("#edt_fecha").val();
+    var fecha_z = fecha2_z.substr(6,4) + fecha2_z.substr(3,2) + fecha2_z.substr(1,2);
     var telefono_z = $("#edt_telefono").val();
     var importe_z = 20;
-    const db = firebase.database();
-    const misrecargas = db.ref("recargas/"+idcliente_z);
+
     var nuevarecarga_z = {
         "codigo":idcliente_z,
         "telefono":telefono_z,
-        "fecha":fecha_z,
+        "fecha":fecha2_z,
         "importe":importe_z,
         "usuario":usuario_z
     }
 
-
+    const db = firebase.database();
+    const misrecargas = db.ref("recargas/"+idcliente_z);
+    var newPostKey = firebase.database().ref().child('recargas').push().key;
+    
+    var updates = {};
+    updates['/recargas/' +idcliente_z + '/' + newPostKey] = nuevarecarga_z;
+    firebase.database().ref().update(updates);
+    $('#btn_cerrar_modal').click();
+    carga_tabla_recargas()    
 }
