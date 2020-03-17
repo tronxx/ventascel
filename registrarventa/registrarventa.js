@@ -74,7 +74,8 @@ function carga_tabla_recargas() {
         snapshot.forEach ( function(childSnapshot){
             var dd_z = childSnapshot.val(); 
             var uid_z = childSnapshot.key; 
-            var row_z = "<tr data-idcliente='" +  uid_z + "'>";
+            // console.log(dd_z);
+            var row_z = "<tr data-idrecarga='" +  uid_z + "'>";
             row_z = row_z + "<td>" +  dd_z.fecha + "</td>";
             row_z = row_z + "<td>" +  dd_z.telefono + "</td>";
             row_z = row_z + "<td>" +  dd_z.importe + "</td>";
@@ -86,12 +87,11 @@ function carga_tabla_recargas() {
 
         });
         tabla_z += misrows_z;
+        tabla_z += "</tbody></table>";
+        $("#div_tbl_recargas").append(tabla_z);
+        $("#recargasusadas").val(recargasusadas_z);
     }
     );
-    tabla_z += "</tbody></table>";
-    $("#div_tbl_recargas").append(tabla_z);
-    $("#recargasusadas").val(recargasusadas_z);
-    console.log("Recargas Total:", recargastotal_z, "Usadas:", recargasusadas_z)
     if(recargasusadas_z < recargastotal_z ) {
         encender_apagar_botones ("Visible");
     } else {
@@ -131,31 +131,52 @@ function encender_apagar_botones (modo_z){
 };
 
 function cargar_formulario_venta(){
-   $("#modal_frm_registrar_venta").modal("show");
+    var dd_z = new Date();
+    var aa_z = dd_z.getFullYear();
+    var mm_z = 100 + dd_z.getMonth() + 1;
+    var dd_z = 100 + dd_z.getDay();
+    var strfecha_z = aa_z + "-" + mm_z.toString().substr(1,2) + "-" + dd_z.toString().substr(1,2);
+    console.log(strfecha_z);
+    var telefono_z = $("#edt_telefono").val();
+    console.log("Telefono:", telefono_z);
+    $( "#edt_fecha" ).val(strfecha_z);
+    $("#edt_telrecarga").val(telefono_z);
+    $("#modal_frm_registrar_venta").modal("show");
 }
 
 function btn_aceptar_recarga(){
     var idcliente_z = $("#idcliente_sel").val();
     var fecha2_z = $("#edt_fecha").val();
     var fecha_z = fecha2_z.substr(6,4) + fecha2_z.substr(3,2) + fecha2_z.substr(1,2);
-    var telefono_z = $("#edt_telefono").val();
+    var telrecarga_z = $("#edt_telrecarga").val();
     var importe_z = 20;
 
     var nuevarecarga_z = {
         "codigo":idcliente_z,
-        "telefono":telefono_z,
+        "telefono":telrecarga_z,
         "fecha":fecha2_z,
         "importe":importe_z,
         "usuario":usuario_z
     }
+    console.log(nuevarecarga_z);
 
     const db = firebase.database();
     const misrecargas = db.ref("recargas/"+idcliente_z);
-    var newPostKey = firebase.database().ref().child('recargas').push().key;
+    var clientemodificado_z = {
+        "codigo":idcliente_z,
+        "nombre":$("#edt_nombre").val(),
+        "telefono":$("#edt_telefono").val(),
+        "recargas":$("#recargastotal").val(),
+        "usadas": parseInt($("#recargasusadas").val()) + 1
+    }
     
+
+    var newPostKey = firebase.database().ref().child('recargas').push().key;
     var updates = {};
     updates['/recargas/' +idcliente_z + '/' + newPostKey] = nuevarecarga_z;
+    updates['/clientes/' +idcliente_z ] = clientemodificado_z;
     firebase.database().ref().update(updates);
+    //document('/clientes/'+idcliente_z).updateData(["usadas":FieldValue.Increment(1)]):
     $('#btn_cerrar_modal').click();
-    carga_tabla_recargas()    
+    carga_tabla_recargas();
 }
