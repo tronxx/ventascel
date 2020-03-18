@@ -101,13 +101,3 @@ function carga_clientes(){
     ) ;
 };
 
-$('#btn_eliminar').click(function(){
-    var idcliente_z = $("#idcliente_sel").val();
-    var  data_z = {
-        "idcliente": idcliente_z,
-        "accion": "eliminar_ok"
-    }
-    url_z = "edicion_cliente.html?idcliente="+idcliente_z+"&accion=eliminar";
-    $(location).attr('href',url_z);
-
-});

@@ -1,0 +1,116 @@
+<html>
+    <head>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">        
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </head>
+    <body>
+      <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="../main/main.html">Inicio <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Mantenimiento
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Clientes</a>
+                <a class="dropdown-item" href="#">Tiendas</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
+      <div class="card-header">
+          Tiendas
+      </div>
+      <div class="card-body">
+          <div class="container">
+              <button id="btn_agregar" class="btn btn-primary">Nuevo</button>
+              <button id="btn_modificar" class="btn btn-primary" visible="false">Modifica</button>
+              <button id="btn_eliminar" class="btn btn-danger" visible="false">Elimina</button>
+
+          </div>
+          <table id="tbl_tiendas" class="table table-hover">
+              <thead>
+              <tr>
+                  <th>Codigo</th>
+                  <th>Nombre</th>
+                  <th></th>
+              </tr>
+            </thead>
+            <tbody id="body_tbl_tiendas">
+
+            </tbody>
+
+          </table>
+      </div>
+     <!-- Modal -->
+      <div class="modal fade" id="modal_frm_datos_tienda" role="dialog">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                      <button type="button" id="btn_cerrar_modal" class="close" data-dismiss="modal">
+                          <span aria-hidden="true">X</span>
+                          <span class="sr-only">Cerrar</span>
+                      </button>
+                      <h4 class="modal-title" id="myModalLabel">Datos de la Tienda</h4>
+                  </div>
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+                      <p class="statusMsg"></p>
+                      <form role="form">
+                          <div class="form-group">
+                              <label for="edt_codigo">Codigo</label>
+                              <input type="text" class="form-control" name="edt_codigo"  id="edt_codigo" placeholder="Codigo de Tienda"/>
+                          </div>
+                          <div class="form-group">
+                              <label for="edt_nombre">Nombre</label>
+                              <input type="text" class="form-control" name="edt_nombre" id="edt_nombre" placeholder="Nombre de la Tienda"/>
+                          </div>
+                      </form>
+                  </div>
+                  <!-- Modal Footer -->
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn btn-primary submitBtn" onclick="btn_aceptar_tienda()">Aceptar</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+     <!-- Fin de Modal -->
+        
+      <input type="hidden" id="idtienda_sel" value = "-1">
+      <input type="hidden" id="row_sel" value="-1">
+      <input type="hidden" id="accion_seleccionada" value="-1">
+        
+      <script src="tiendas.js"></script>
+      <script src="../checasesion.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-database.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>      
+      <script src="../registrarfirebase.js"></script>
+      <script src="../utils/tools.js"></script>
+      
+    </body>
+
+</html>
