@@ -54,10 +54,12 @@ function encender_apagar_botones (modo_z){
     if (modo_z == "Visible") {
         $("#btn_modificar").show();
         $("#btn_eliminar").show();
+        $("#btn_seltda").show();
     }
     if (modo_z == "InVisible") {
         $("#btn_modificar").hide();
         $("#btn_eliminar").hide();
+        $("#btn_seltda").hide();
     }
 
 };
@@ -161,6 +163,29 @@ function carga_tienda() {
         console.log("Tienda Encontrado", dd_z);
         $("#edt_codigo").val(dd_z.codigo);
         $("#edt_nombre").val(dd_z.nombre);
+    }
+    ) ;
+}
+
+$('#btn_seltda').click(function(){
+    seleccionar_tienda_para_venta();
+});
+
+function seleccionar_tienda_para_venta() {
+    var idtienda_z = $("#idtienda_sel").val();
+    const db = firebase.database();
+    const misclientes = db.ref("tiendas/"+idtienda_z);
+    misclientes.orderByChild("codigo").once("value")
+    .then (function (snapshot) {
+        var dd_z = snapshot.val();
+        tiendavta_z = {
+            "codigo": dd_z.codigo,
+            "nombre": dd_z.nombre
+        }
+        localStorage.setItem('tienda_venta_codigo', dd_z.codigo);
+        localStorage.setItem('tienda_venta_nombre', dd_z.nombre);
+        localStorage.setItem('tienda_venta', tiendavta_z);
+        window.alert("Se ha Seleccionado Esta Tienda para Venta:", dd_z.codigo);
     }
     ) ;
 }

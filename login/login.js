@@ -17,7 +17,6 @@ $("#btn_login").on("click",  e=>{
        window.location="../main/main.html";
    }).catch(function(){
        alert("Usuario Incorrecto. Intente de Nuevo");
-       window.localStorage.clear();
    });
 }
 );

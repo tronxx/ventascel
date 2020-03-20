@@ -1,3 +1,8 @@
+var tienda_z = localStorage.getItem('tienda_venta');
+var codtda_z = localStorage.getItem('tienda_venta_codigo');
+var nomtda_z = localStorage.getItem('tienda_venta_nombre');
+
+
 $(document).ready(function(){
     var usuario_z = checa_sesion();
     if( usuario_z.usuario == null) {
@@ -48,7 +53,8 @@ function agregar_modificar_eliminar_cliente(){
         "nombre":nombre_z,
         "telefono":tel_z,
         "recargas":recargas_z,
-        "usadas":0
+        "usadas":0,
+        "tienda":codtda_z
     }
     var modo_z = getParameterByName('accion');
     const db = firebase.database();

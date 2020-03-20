@@ -1,3 +1,8 @@
+var tienda_z = localStorage.getItem('tienda_venta');
+var codtda_z = localStorage.getItem('tienda_venta_codigo');
+var nomtda_z = localStorage.getItem('tienda_venta_nombre');
+
+
 $(document).ready(function(){
     var usuario_z = checa_sesion();
     if( usuario_z.usuario == null) {
@@ -5,13 +10,15 @@ $(document).ready(function(){
     }
     registrarapp();
     encender_apagar_botones ("InVisible");
+    var texto_z = "Clientes de : " + codtda_z + " " + nomtda_z;
+    $("#head_card").text(texto_z);
     const auth = firebase.auth();
     auth.signInWithEmailAndPassword(usuario_z.usuario, usuario_z.pwd)
    .then(function(user){
        console.log("Usuario ingresado");
        console.log ("Voy a Buscar los Clientes");
        carga_clientes();
-   }).catch(function(){
+    }).catch(function(){
        console.log("Usuario Incorrecto. Intente de Nuevo");
    });
 }
@@ -78,19 +85,20 @@ $('#btn_eliminar').click(function(){
 });
 
 function carga_clientes(){
+    console.log("Tienda:", codtda_z);
     const db = firebase.database();
-    const misclientes = db.ref("clientes");
+    const misclientes = db.ref("clientes").child("tienda").equalTo(codtda_z);
     misclientes.orderByChild("codigo").once("value")
     .then (function (snapshot) {
         snapshot.forEach ( function(childSnapshot){
-            var d = childSnapshot.val(); 
+            var dd_z = childSnapshot.val(); 
             var uid_z = childSnapshot.key; 
             var row_z = "<tr data-idcliente='" +  uid_z + "'>";
-            row_z = row_z + "<td>" +  d.codigo + "</td>";
-            row_z = row_z + "<td>" +  d.nombre + "</td>";
-            row_z = row_z + "<td>" +  d.telefono + "</td>";
-            row_z = row_z + "<td>" +  d.recargas + "</td>";
-            row_z = row_z + "<td>" +  d.usadas + "</td>";
+            row_z = row_z + "<td>" +  dd_z.codigo + "</td>";
+            row_z = row_z + "<td>" +  dd_z.nombre + "</td>";
+            row_z = row_z + "<td>" +  dd_z.telefono + "</td>";
+            row_z = row_z + "<td>" +  dd_z.recargas + "</td>";
+            row_z = row_z + "<td>" +  dd_z.usadas + "</td>";
             var idcheck_z = "chk_" + uid_z;
             row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
             row_z = row_z + "</tr>";
