@@ -87,7 +87,7 @@ $('#btn_eliminar').click(function(){
 function carga_clientes(){
     console.log("Tienda:", codtda_z);
     const db = firebase.database();
-    const misclientes = db.ref("clientes").child("tienda").equalTo(codtda_z);
+    const misclientes = db.ref("clientes");
     misclientes.orderByChild("codigo").once("value")
     .then (function (snapshot) {
         snapshot.forEach ( function(childSnapshot){
