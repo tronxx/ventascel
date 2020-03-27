@@ -17,11 +17,6 @@ $(document).ready(function(){
 }
 )
 
-$('#btn_agregar').click(function(){
-  $("#accion_seleccionada").val("agregar");
-  cargar_formulario_tiendas();
-});
-
 // -- Funcion que checa si hacen click en la Tabla de Tiendas
 
 $('#tbl_tiendas').on('click','tr td', function(evt){
@@ -44,10 +39,22 @@ $('#tbl_tiendas').on('click','tr td', function(evt){
     console.log("uid:", idtienda_z);
 });
 
+$('#btn_agregar').click(function(){
+    $("#accion_seleccionada").val("agregar");
+    $("#myModalLabel").text("Datos de la Tienda");
+    cargar_formulario_tiendas();
+});
+
 $('#btn_modificar').click(function(){
     $("#accion_seleccionada").val("modificar");
+    $("#myModalLabel").text("Datos de la Tienda");
     carga_tienda();
-    cargar_formulario_tiendas();
+});
+
+$('#btn_eliminar').click(function(){
+    $("#accion_seleccionada").val("eliminar");
+    $("#myModalLabel").text("Seguro de Eliminar esta Tienda ?");
+    carga_tienda();
 });
 
 function encender_apagar_botones (modo_z){
@@ -64,89 +71,66 @@ function encender_apagar_botones (modo_z){
 
 };
 
-$('#btn_eliminar').click(function(){
-    $("#accion_seleccionada").val("eliminar");
-    carga_tienda();
-    $("#myModalLabel").text="Seguro de Eliminar esta Tienda ?"
-    cargar_formulario_tiendas();
-});
+function carga_tiendas (){
+    var url_z = '../utils/basedato.php?accion=buscar_tiendas';
 
-function carga_tiendas(){
-    const db = firebase.database();
-    const misclientes = db.ref("tiendas");
-    misclientes.orderByChild("codigo").once("value")
-    .then (function (snapshot) {
-        snapshot.forEach ( function(childSnapshot){
-            var d = childSnapshot.val(); 
-            var uid_z = childSnapshot.key; 
-            var row_z = "<tr data-idtienda='" +  uid_z + "'>";
-            row_z = row_z + "<td>" +  d.codigo + "</td>";
-            row_z = row_z + "<td>" +  d.nombre + "</td>";
-            var idcheck_z = "chk_" + uid_z;
+    //var url = 'http://mdss1/www/cgi/cartera/busca_vnd.php';
+    $.getJSON(url_z).done(function (result){
+        console.log("Consulta Efectuada");
+        for(var ii_z=0; ii_z<result.length; ii_z++)
+        {
+            var row_z = "<tr data-idtienda='" +  result[ii_z]["idtienda"] + "'>";
+            row_z = row_z + "<td>" +  result[ii_z]["codigo"] + "</td>";
+            row_z = row_z + "<td>" +  result[ii_z]["nombre"] + "</td>";
+            var idcheck_z = "chk_" + result[ii_z]["idtienda"];
             row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
             row_z = row_z + "</tr>";
             $("#tbl_tiendas tbody").append(row_z);
+        }
+    });
 
-        });
-    }
-    ) ;
 };
+
 
 function cargar_formulario_tiendas(){
     $("#modal_frm_datos_tienda").modal("show");
 }
 
 function btn_aceptar_tienda(){
-    var modo_z = $("#accion_seleccionada").val();
+    console.log("Estoy en aceptar tienda");
+    var modo_z = "tienda_" + $("#accion_seleccionada").val();
+    var idtienda_z = $("#idtienda_sel").val();
     var codigo_z = $("#edt_codigo").val();
     var nombre_z = $("#edt_nombre").val();
     var status_z = "A";
-    var tienda_z = {
+    var data_z = {
+        "idtienda":idtienda_z,
         "codigo":codigo_z,
         "nombre":nombre_z,
-        "status":status_z
+        "status":status_z,
+        "modo":modo_z
     }
-    const db = firebase.database();
-    const mistiendas_z = db.ref("tiendas/" + codigo_z);
-    if(modo_z == "agregar") {
-        mistiendas_z.set(tienda_z)
-        .then(result => {
-            alert('Exito', 'Tienda Agregada');
-            window.location="./tiendas.html";
-        })
-        .catch( error => {
-            console.log("Error :");
-            console.log(error);
-                alert( 'Error - ' + error.message);
-        });
+    console.log(modo_z);
+    console.log(data_z);
+    var url_z = '../utils/basedato.php';
+    $.ajax({
+        url:url_z,
+        type:'POST',
+        data:data_z
+    })
+    .then(function(d){
+      alert("Aplicacion con Exito");
+      //url = "http://localhost/www/programas/cartera/vendedores/vendedores.html";
+      url_z = "../tiendas/tiendas.html";
+      $(location).attr('href',url_z);
+
+    }, function(razon){
+      alert("Ha ocurrido un error, intente de nuevo");
+    }
+    );
     
-    }
-    if(modo_z == "modificar") {
-        mistiendas_z.update(tienda_z)
-        .then(result => {
-            alert('Exito', 'Tienda Modificada');
-            window.location="./tiendas.html";
-        })
-        .catch( error => {
-            console.log("Error :");
-            console.log(error);
-                alert( 'Error - ' + error.message);
-        });
-    
-    }
-    if(modo_z == "eliminar") {
-        mistiendas_z.set(null)
-        .then(result => {
-            alert('Exito', 'Tienda Eliminada');
-            window.location="./tiendas.html";
-        })
-        .catch( error => {
-            console.log("Error :");
-            console.log(error);
-                alert( 'Error - ' + error.message);
-        });
-    
-    }
+    url_z = "../tiendas/tiendas.html";
+    $(location).attr('href',url_z);
     
     $('#btn_cerrar_modal').click();
 
@@ -154,17 +138,19 @@ function btn_aceptar_tienda(){
 
 function carga_tienda() {
     var idtienda_z = $("#idtienda_sel").val();
-    console.log("idcliente:", idtienda_z);
-    const db = firebase.database();
-    const misclientes = db.ref("tiendas/"+idtienda_z);
-    misclientes.orderByChild("codigo").once("value")
-    .then (function (snapshot) {
-        var dd_z = snapshot.val();
-        console.log("Tienda Encontrado", dd_z);
-        $("#edt_codigo").val(dd_z.codigo);
-        $("#edt_nombre").val(dd_z.nombre);
-    }
-    ) ;
+    var url_z = '../utils/basedato.php?accion=buscar_tienda&idtienda=' + idtienda_z;
+    console.log(url_z);
+
+    $.getJSON(url_z).done(function (result){
+        console.log("Consulta de Una tienda:");
+        for(var ii_z=0; ii_z<result.length; ii_z++)
+        {
+            $("#edt_codigo").val(result[ii_z]["codigo"]);
+            $("#edt_nombre").val(result[ii_z]["nombre"]);
+        }
+        cargar_formulario_tiendas();
+    });
+
 }
 
 $('#btn_seltda').click(function(){
@@ -173,20 +159,29 @@ $('#btn_seltda').click(function(){
 
 function seleccionar_tienda_para_venta() {
     var idtienda_z = $("#idtienda_sel").val();
-    const db = firebase.database();
-    const misclientes = db.ref("tiendas/"+idtienda_z);
-    misclientes.orderByChild("codigo").once("value")
-    .then (function (snapshot) {
-        var dd_z = snapshot.val();
-        tiendavta_z = {
-            "codigo": dd_z.codigo,
-            "nombre": dd_z.nombre
+    var url_z = '../utils/basedato.php?accion=buscar_tienda&idtienda=' + idtienda_z;
+    console.log(url_z);
+    var codigo_z = "";
+    var nombre_z = "";
+
+    $.getJSON(url_z).done(function (result){
+        console.log("1.-Consulta de Una tienda:");
+        for(var ii_z=0; ii_z<result.length; ii_z++)
+        {
+            codigo_z = result[ii_z]["codigo"];
+            nombre_z = result[ii_z]["nombre"];
         }
-        localStorage.setItem('tienda_venta_codigo', dd_z.codigo);
-        localStorage.setItem('tienda_venta_nombre', dd_z.nombre);
+        
+        var tiendavta_z = {
+            "codigo": codigo_z,
+            "nombre": nombre_z
+        }
+        localStorage.setItem('tienda_venta_codigo', codigo_z);
+        localStorage.setItem('tienda_venta_nombre', nombre_z);
         localStorage.setItem('tienda_venta', tiendavta_z);
-        window.alert("Se ha Seleccionado Esta Tienda para Venta:", dd_z.codigo);
-    }
-    ) ;
+        window.alert("Selecciono Tienda para Venta:" + 
+                     codigo_z + " " + nombre_z );
+        
+    });
 }
 
