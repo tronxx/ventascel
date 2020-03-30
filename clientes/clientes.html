@@ -1,7 +1,9 @@
 <html>
     <head>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">        
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="http://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+       crossorigin="anonymous"></script>        
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </head>
@@ -64,11 +66,52 @@
 
           </table>
       </div>
+        
+     <!-- Modal -->
+      <div class="modal fade" id="modal_frm_datos_cliente" role="dialog">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                      <h4 class="modal-title" id="myModalLabel">Datos del Cliente</h4>
+                      <button type="button" id="btn_cerrar_modal" class="close" data-dismiss="modal">
+                          <span aria-hidden="true">X</span>
+                          <span class="sr-only">Cerrar</span>
+                      </button>
+                  </div>
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+                      <p class="statusMsg"></p>
+                      <form role="form">
+                          <div class="form-group">
+                              <label for="edt_codigo">Codigo</label>
+                              <input type="text" class="form-control" name="edt_codigo"  id="edt_codigo" placeholder="Codigo del Cliente"/>
+                          </div>
+                          <div class="form-group">
+                              <label for="edt_nombre">Nombre</label>
+                              <input type="text" class="form-control" name="edt_nombre" id="edt_nombre" placeholder="Nombre del Cliente"/>
+                          </div>
+                          <div class="form-group">
+                              <label for="edt_telefono">Telefono</label>
+                              <input type="text" class="form-control" name="edt_telefono" id="edt_telefono" placeholder="Numero de Telefono"/>
+                          </div>
+                      </form>
+                  </div>
+                  <!-- Modal Footer -->
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn btn-primary submitBtn" onclick="btn_aceptar_cliente()">Aceptar</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+     <!-- Fin de Modal -->
+
+        
       <input type="hidden" id="idcliente_sel" value = "-1">
       <input type="hidden" id="row_sel" value="-1">
       <script src="clientes.js"></script>
       <script src="../checasesion.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
       <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
       <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-analytics.js"></script>
       <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-database.js"></script>

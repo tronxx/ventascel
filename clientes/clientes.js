@@ -24,13 +24,6 @@ $(document).ready(function(){
 }
 )
 
-$('#btn_agregar').click(function(){
-    var idcliente = -1;
-    //url_z = "edicion_vendedor.html?idvendedor="+idvendedor+"&modo=buscar";
-    url_z = "edicion_cliente.html?accion=agregar";
-    $(location).attr('href',url_z);
-});
-
 $('#tbl_clientes').on('click','tr td', function(evt){
     var target,idvendedor,valorSeleccionado;
     var idbtn_z;
@@ -51,16 +44,6 @@ $('#tbl_clientes').on('click','tr td', function(evt){
     console.log("uid:", idcliente_z);
 });
 
-$('#btn_modificar').click(function(){
-    var idcliente_z = $("#idcliente_sel").val();
-    var  data_z = {
-        "idcliente": idcliente_z,
-        "accion": "modificar_ok"
-    }
-    url_z = "edicion_cliente.html?idcliente="+idcliente_z+"&accion=modificar";
-    $(location).attr('href',url_z);
-
-});
 
 function encender_apagar_botones (modo_z){
     if (modo_z == "Visible") {
@@ -74,17 +57,33 @@ function encender_apagar_botones (modo_z){
 
 };
 
-$('#btn_eliminar').click(function(){
-    var idcliente_z = $("#idcliente_sel").val();
-    var  data_z = {
-        "idcliente": idcliente_z,
-        "accion": "eliminar_ok"
-    }
-    url_z = "edicion_cliente.html?idcliente="+idcliente_z+"&accion=eliminar";
-    $(location).attr('href',url_z);
-});
 
-function carga_clientes(){
+function carga_clientes (){
+    var url_z = '../utils/basedato.php?accion=buscar_clientes&codtda=' + codtda_z;
+
+    //var url = 'http://mdss1/www/cgi/cartera/busca_vnd.php';
+    $.getJSON(url_z).done(function (result){
+        console.log("Consulta Efectuada");
+        for(var ii_z=0; ii_z<result.length; ii_z++)
+        {
+            var row_z = "<tr data-idcliente='" +  result[ii_z]["idcliente"] + "'>";
+            row_z = row_z + "<td>" +  result[ii_z]["codigo"] + "</td>";
+            row_z = row_z + "<td>" +  result[ii_z]["nombre"] + "</td>";
+            row_z = row_z + "<td>" +  result[ii_z]["telefono"] + "</td>";
+            row_z = row_z + "<td>" +  result[ii_z]["recargas"] + "</td>";
+            row_z = row_z + "<td>" +  result[ii_z]["usadas"] + "</td>";
+            var idcheck_z = "chk_" +  result[ii_z]["idcliente"];
+            row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
+            row_z = row_z + "</tr>";
+            $("#tbl_clientes tbody").append(row_z);
+        }
+    });
+
+};
+
+
+
+function xcarga_clientes(){
     console.log("Tienda:", codtda_z);
     const db = firebase.database();
     const misclientes = db.ref("clientes");
@@ -109,3 +108,89 @@ function carga_clientes(){
     ) ;
 };
 
+function cargar_formulario_clientes(){
+    $("#modal_frm_datos_cliente").modal("show");
+}
+
+$('#btn_agregar').click(function(){
+    $("#accion_seleccionada").val("agregar");
+    $("#myModalLabel").text("Datos del Cliente");
+    cargar_formulario_clientes();
+});
+
+$('#btn_modificar').click(function(){
+    $("#accion_seleccionada").val("modificar");
+    $("#myModalLabel").text("Datos del Cliente");
+    carga_cliente();
+});
+
+$('#btn_eliminar').click(function(){
+    $("#accion_seleccionada").val("eliminar");
+    $("#myModalLabel").text("Seguro de Eliminar este Cliente ?");
+    carga_cliente();
+});
+
+function carga_cliente() {
+    var idcliente_z = $("#idcliente_sel").val();
+    var url_z = '../utils/basedato.php?accion=busca_un_cliente&idcliente=' + idcliente_z;
+    console.log(url_z);
+
+    $.getJSON(url_z).done(function (result){
+        console.log("Consulta de Un Cliente:");
+        for(var ii_z=0; ii_z<result.length; ii_z++)
+        {
+            $("#edt_codigo").val(result[ii_z]["codigo"]);
+            $("#edt_nombre").val(result[ii_z]["nombre"]);
+            $("#edt_telefono").val(result[ii_z]["telefono"]);
+        }
+        cargar_formulario_clientes();
+    });
+
+}
+
+function btn_aceptar_cliente(){
+    alert("Estoy en aceptar Cliente");
+    
+    var modo_z = "cliente_" + $("#accion_seleccionada").val();
+    var idcliente_z = $("#idcliente_sel").val();
+    var codigo_z = $("#edt_codigo").val();
+    var nombre_z = $("#edt_nombre").val();
+    var telefono_z = $("#edt_telefono").val();
+    var recargas_z = 4;
+    var status_z = "A";
+    var data_z = {
+        "idcliente":idcliente_z,
+        "codigo":codigo_z,
+        "nombre":nombre_z,
+        "telefono":telefono_z,
+        "recargas":recargas_z,
+        "tienda": codtda_z,
+        "status":status_z,
+        "modo":modo_z
+    }
+    console.log(modo_z);
+    console.log(data_z);
+    var url_z = '../utils/basedato.php';
+    alert("Voy a efectuar el post");
+    $.ajax({
+        url:url_z,
+        type:'POST',
+        data:data_z
+    })
+    .then(function(d){
+      alert("Aplicacion con Exito");
+      //url = "http://localhost/www/programas/cartera/vendedores/vendedores.html";
+      url_z = "../clientes/clientes.html";
+      $(xlocation).attr('href',url_z);
+
+    }, function(razon){
+      alert("Ha ocurrido un error, intente de nuevo");
+    }
+    );
+    
+    url_z = "../clientes/clientes.html";
+    $(xlocation).attr('href',url_z);
+    
+    $('#btn_cerrar_modal').click();
+
+}

@@ -1,7 +1,7 @@
 function crear_bases_datos() {
 
 create table clientes (
-  idcliente     integer not null primary key auto_incremen,
+  idcliente     integer not null primary key auto_increment,
   codigo        varchar(10) not null,
   nombre        varchar(100) not null ,
   fecha         date not null ,
@@ -13,14 +13,14 @@ create table clientes (
 );
 
 create table tiendas (
-  idtienda      integer not null primary key,
+  idtienda      integer not null primary key auto_increment,
   codigo        varchar(2) not null ,
   nombre        varchar(100) not null,
   status          varchar(1) not null
 );
 
 create table recargas (
-  idrecarga     integer not null primary key,
+  idrecarga     integer not null primary key auto_increment,
   fecha         date not null ,
   telefono      varchar(10) not null ,
   importe       double,
@@ -30,7 +30,7 @@ create table recargas (
     
     
 create table usuarios (
-    idusuario       integer not null primary key,
+    idusuario       integer not null primary key auto_increment,
     email           varchar(100) not null ,
     password        varchar(100) not null ,
     nombre          varchar(100) not null ,
