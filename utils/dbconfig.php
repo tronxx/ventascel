@@ -4,6 +4,8 @@ function conecta_db() {
     $DBhost = "localhost";
     $DBuser = "root";
     $DBpass = "lux";
+    // Aqui el Nuevo Password en la casa es vacio
+    $DBpass = "";
     $DBname = "ventasta";
     // echo "<hr>" . $DBhost ." - " . $DBuser . " - " . $DBpass . " - " . $DBname . " Estoy en Tron";
     // phpinfo();

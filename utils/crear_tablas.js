@@ -21,6 +21,8 @@ create table tiendas (
 
 create table recargas (
   idrecarga     integer not null primary key auto_increment,
+  idcliente     integer not null,
+  idtienda      integer not null,
   fecha         date not null ,
   telefono      varchar(10) not null ,
   importe       double,

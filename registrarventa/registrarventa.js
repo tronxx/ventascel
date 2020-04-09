@@ -1,5 +1,8 @@
+var usuario_z = localStorage.getItem('usuario');
+var tienda_z = localStorage.getItem('tienda_venta_codigo');
+
 $(document).ready(function(){
-    var usuario_z = checa_sesion();
+    usuario_z = checa_sesion();
     if( usuario_z.usuario == null) {
         window.location="../login/login.html";
     }
@@ -11,6 +14,7 @@ $(document).ready(function(){
     auth.signInWithEmailAndPassword(usuario_z.usuario, usuario_z.pwd)
    .then(function(user){
        console.log("Usuario ingresado");
+       console.log(tienda_z);
     }).catch(function(){
        console.log("Usuario Incorrecto. Intente de Nuevo");
        window.location="../login/login.html";
@@ -38,6 +42,25 @@ $('#btn_buscarcliente').click(function(){
 });
 
 function carga_cliente() {
+    var codcli_z = $("#edt_codigo").val();
+    var url_z = '../utils/basedato.php?accion=buscar_un_cliente_x_codigo&codigo=' + codcli_z;
+
+    $.getJSON(url_z).done(function (result){
+        for(var ii_z=0; ii_z<result.length; ii_z++)
+        {
+            $("#edt_codigo").val(result[ii_z]["codigo"]);
+            $("#edt_nombre").val(result[ii_z]["nombre"]);
+            $("#edt_telefono").val(result[ii_z]["telefono"]);
+            $("#edt_recargas").val(result[ii_z]["recargas"]);
+            $("#idcliente_sel").val(result[ii_z]["idcliente"]);
+            $("#recargastotal").val(result[ii_z]["recargas"]); 
+        }
+        carga_tabla_recargas();
+    });
+
+}
+
+function xcarga_cliente() {
     var idcliente_z = $("#edt_codigo").val();
     console.log("idcliente:", idcliente_z);
     const db = firebase.database();
@@ -58,40 +81,42 @@ function carga_cliente() {
 }
 
 function carga_tabla_recargas() {
-    var idcliente_z = $("#edt_codigo").val();
+    var idcliente_z = $("#idcliente_sel").val();
     var recargasusadas_z = 0;
     var recargastotal_z = $("#recargastotal").val();
+    var misrows_z="";
     $("#div_tbl_recargas").empty();
     console.log("idcliente:", idcliente_z);
     var tabla_z = "<table id=\"tbl_recargas\" border=\"1\" class=\"table table-hover\" >";
-    tabla_z += "<thead><tr><th>Fecha</th><th>Telefono</th><th>Importe</th><th></th></tr></thead>";
+    tabla_z += "<thead><tr>";
+    tabla_z += "<th>Fecha</th>";
+    tabla_z += "<th>Telefono</th>";
+    tabla_z += "<th>Importe</th>";
+    tabla_z += "<th></th>";
+    tabla_z += "</tr></thead>";
     tabla_z += "<tbody>";
-    const db = firebase.database();
-    const misclientes = db.ref("recargas/"+idcliente_z);
-    misclientes.orderByChild("fecha").once("value")
-    .then (function (snapshot) {
-        var misrows_z = "";
-        snapshot.forEach ( function(childSnapshot){
-            var dd_z = childSnapshot.val(); 
-            var uid_z = childSnapshot.key; 
-            // console.log(dd_z);
-            var row_z = "<tr data-idrecarga='" +  uid_z + "'>";
-            row_z = row_z + "<td>" +  dd_z.fecha + "</td>";
-            row_z = row_z + "<td>" +  dd_z.telefono + "</td>";
-            row_z = row_z + "<td>" +  dd_z.importe + "</td>";
-            var idcheck_z = "chk_" + uid_z;
+
+    var url_z = '../utils/basedato.php?accion=buscar_recargas_cliente&idcliente=' + idcliente_z;
+
+    $.getJSON(url_z).done(function (result){
+        for(var ii_z=0; ii_z<result.length; ii_z++)
+        {
+            var idrecarga_z = result[ii_z]["idrecarga"]
+            var row_z = "<tr data-idrecarga='" +  idrecarga_z + "'>";
+            row_z = row_z + "<td>" + result[ii_z]["fecha"]  + "</td>";
+            row_z = row_z + "<td>" + result[ii_z]["telefono"]  + "</td>";
+            row_z = row_z + "<td>" + result[ii_z]["importe"]  + "</td>";
+            var idcheck_z = "chk_" + idrecarga_z;
             row_z = row_z + "<td> <img width=40px; src=\"../imgs/vacio.png\" id=\"" + idcheck_z + "\" >" + "</td>";
             row_z = row_z + "</tr>";
             misrows_z += row_z;
             recargasusadas_z += 1;
-
-        });
+        }
         tabla_z += misrows_z;
         tabla_z += "</tbody></table>";
         $("#div_tbl_recargas").append(tabla_z);
         $("#recargasusadas").val(recargasusadas_z);
-    }
-    );
+    });
     if(recargasusadas_z < recargastotal_z ) {
         encender_apagar_botones ("Visible");
     } else {
@@ -131,10 +156,11 @@ function encender_apagar_botones (modo_z){
 };
 
 function cargar_formulario_venta(){
-    var dd_z = new Date();
-    var aa_z = dd_z.getFullYear();
-    var mm_z = 100 + dd_z.getMonth() + 1;
-    var dd_z = 100 + dd_z.getDay();
+    var hoy_z = new Date();
+    var aa_z = hoy_z.getFullYear();
+    var mm_z = 100 + hoy_z.getMonth() + 1;
+    var dd_z = 100 + hoy_z.getDate();
+
     var strfecha_z = aa_z + "-" + mm_z.toString().substr(1,2) + "-" + dd_z.toString().substr(1,2);
     console.log(strfecha_z);
     var telefono_z = $("#edt_telefono").val();
@@ -147,36 +173,36 @@ function cargar_formulario_venta(){
 function btn_aceptar_recarga(){
     var idcliente_z = $("#idcliente_sel").val();
     var fecha2_z = $("#edt_fecha").val();
-    var fecha_z = fecha2_z.substr(6,4) + fecha2_z.substr(3,2) + fecha2_z.substr(1,2);
+    var fecha_z = fecha2_z.substr(6,4) + "-" + fecha2_z.substr(3,2) + "-" + fecha2_z.substr(1,2);
     var telrecarga_z = $("#edt_telrecarga").val();
     var importe_z = 20;
+    var nomuser_z = usuario_z.usuario;
+    console.log(tienda_z);
 
     var nuevarecarga_z = {
-        "codigo":idcliente_z,
+        "idcliente":idcliente_z,
+        "tienda":tienda_z,
         "telefono":telrecarga_z,
         "fecha":fecha2_z,
         "importe":importe_z,
-        "usuario":usuario_z
+        "usuario":nomuser_z,
+        "modo":"recarga_agregar"
     }
     console.log(nuevarecarga_z);
-
-    const db = firebase.database();
-    const misrecargas = db.ref("recargas/"+idcliente_z);
-    var clientemodificado_z = {
-        "codigo":idcliente_z,
-        "nombre":$("#edt_nombre").val(),
-        "telefono":$("#edt_telefono").val(),
-        "recargas":$("#recargastotal").val(),
-        "usadas": parseInt($("#recargasusadas").val()) + 1
-    }
+    var url_z = '../utils/basedato.php';
     
-
-    var newPostKey = firebase.database().ref().child('recargas').push().key;
-    var updates = {};
-    updates['/recargas/' +idcliente_z + '/' + newPostKey] = nuevarecarga_z;
-    updates['/clientes/' +idcliente_z ] = clientemodificado_z;
-    firebase.database().ref().update(updates);
-    //document('/clientes/'+idcliente_z).updateData(["usadas":FieldValue.Increment(1)]):
-    $('#btn_cerrar_modal').click();
+    $.ajax({
+        url:url_z,
+        type:'POST',
+        data:nuevarecarga_z
+    })
+    .then(function(d){
+      alert("Aplicacion con Exito");
+      //url = "http://localhost/www/programas/cartera/vendedores/vendedores.html";
+      url_z = "../registrarventa/registrarventa.html";
+      carga_tabla_recargas();
+    }
+    );
     carga_tabla_recargas();
+    $('#btn_cerrar_modal').click();
 }

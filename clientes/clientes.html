@@ -23,7 +23,20 @@
                 Mantenimiento
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Clientes</a>
+                <a class="dropdown-item" href="../tiendas/tiendas.html">Tiendas</a>
+                <a class="dropdown-item" href="../clientes/clientes.html">Clientes</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Operaciones
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="../registrarventa/registrarventa.html">Registrar Venta TA</a>
+                <a class="dropdown-item" href="../reporteventas/reporteventas.html">Reporte de Ventas</a>
                 <a class="dropdown-item" href="#">Another action</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Something else here</a>
@@ -110,6 +123,7 @@
         
       <input type="hidden" id="idcliente_sel" value = "-1">
       <input type="hidden" id="row_sel" value="-1">
+      <input type="hidden" id="accion_seleccionada" value="-1">
       <script src="clientes.js"></script>
       <script src="../checasesion.js"></script>
       <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>

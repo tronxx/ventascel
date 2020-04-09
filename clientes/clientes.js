@@ -132,11 +132,9 @@ $('#btn_eliminar').click(function(){
 
 function carga_cliente() {
     var idcliente_z = $("#idcliente_sel").val();
-    var url_z = '../utils/basedato.php?accion=busca_un_cliente&idcliente=' + idcliente_z;
-    console.log(url_z);
+    var url_z = '../utils/basedato.php?accion=buscar_un_cliente&idcliente=' + idcliente_z;
 
     $.getJSON(url_z).done(function (result){
-        console.log("Consulta de Un Cliente:");
         for(var ii_z=0; ii_z<result.length; ii_z++)
         {
             $("#edt_codigo").val(result[ii_z]["codigo"]);
@@ -171,7 +169,7 @@ function btn_aceptar_cliente(){
     console.log(modo_z);
     console.log(data_z);
     var url_z = '../utils/basedato.php';
-    alert("Voy a efectuar el post");
+    
     $.ajax({
         url:url_z,
         type:'POST',
@@ -181,7 +179,7 @@ function btn_aceptar_cliente(){
       alert("Aplicacion con Exito");
       //url = "http://localhost/www/programas/cartera/vendedores/vendedores.html";
       url_z = "../clientes/clientes.html";
-      $(xlocation).attr('href',url_z);
+      $(location).attr('href',url_z);
 
     }, function(razon){
       alert("Ha ocurrido un error, intente de nuevo");
@@ -189,7 +187,7 @@ function btn_aceptar_cliente(){
     );
     
     url_z = "../clientes/clientes.html";
-    $(xlocation).attr('href',url_z);
+    $(location).attr('href',url_z);
     
     $('#btn_cerrar_modal').click();
 
